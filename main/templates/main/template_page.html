@@ -1,0 +1,69 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ template.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ template.name }}</h1>
+    <h5>HR</h5>
+    <ul class="list-group list-group-flush">
+        {% for item in items %}
+            {% if item.task_type == "HR" %}
+            <div class="input-group mb-3">
+                <li class="list-group-item" style="min-width: 700px;">
+                    {{ item }}
+                </li>
+                <a href="{% url 'deleteTemplateItem' item.id template.id %}"><button class="btn btn-danger" type="submit" name="d{{ item.id }}" value="delete">Delete</button></a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'templateForm' template.id %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input class="form-control" type="text" name="HRText" id="HRText">
+            <button class="btn btn-primary" type="submit" name="addItemHR" value="addItemHR" id="addItemHR">Add Item</button>
+        </div>
+    </form>
+    <h5>IT</h5>
+    <ul class="list-group list-group-flush">
+        {% for item in items %}
+            {% if item.task_type == "IT" %}
+            <div class="input-group mb-3">
+                <li class="list-group-item" style="min-width: 700px;">
+                    {{ item }}
+                </li>
+                <a href="{% url 'deleteTemplateItem' item.id template.id %}"><button class="btn btn-danger" type="submit" name="d{{ item.id }}" value="delete">Delete</button></a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'templateForm' template.id %}">
+    {% csrf_token %}
+        <div class="input-group mb-3">
+            <input class="form-control" type="text" name="ITText" id="ITText">
+            <button class="btn btn-primary" type="submit" name="addItemIT" value="addItemIT" id="addItemIT">Add Item</button>
+        </div>  
+    </form>
+<script>
+    // Get the input field
+var inputIT = document.getElementById("ITText");
+var inputHR = document.getElementById("HRText");
+// Execute a function when the user presses a key on the keyboard
+inputIT.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("addItemIT").click();
+  }
+});
+
+inputHR.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("addItemHR").click();
+  }
+});
+</script>
+{% endblock %}

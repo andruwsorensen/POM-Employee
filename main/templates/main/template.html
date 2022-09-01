@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Template{% endblock %}
+
+{% block content %}
+
+<section>
+<button id="button" class="btn btn-primary font-weight-bold" data-modal="add_checklist">+</button>
+</section>
+<table class="table">
+<thead class="table-light">
+  <tr>
+    <th></th>
+    <th scope="col">Onboarding</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  {% for item in onTemplates %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a class="person-link" href="{% url 'template' item.id %}">{{ item.name }}</td></a>
+      <td style="text-align: right;"><a href="{% url 'deleteTemplate' item.id %}"><button type="sumbit" class="btn btn-danger" name="delete" value="delete";>Delete</button></a></td>
+    </tr>
+  {% endfor %}
+</tbody>
+</table>
+<table class="table">
+  <thead class="table-light">
+    <tr>
+      <th></th>
+      <th scope="col">Offboarding</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in offTemplates %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a class="person-link" href="{% url 'template' item.id %}">{{ item.name }}</td></a>
+        <td style="text-align: right;"><a href="{% url 'deleteTemplate' item.id %}"><button type="sumbit" class="btn btn-danger" name="delete" value="delete">Delete</button></a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  
+  
+  <!--Beginning of the form-->
+  <div id="add_checklist" class="modal">
+    <div class="modal-content">
+      <div class="contact-form">
+        
+        <form id="new-form" class="row g-3" method="post" action="{% url 'addTemplate' %}">
+        {% csrf_token %}
+          <a class="close">&times;</a>
+          <h2 class="font-weight-bold text-center h2">New Template</h2>          
+            <div class="col">
+              <label class="form-label" for="fname">Name:</label>
+              <input class="form-control" type="text" name="name" placeholder="Template Name" required="True"/>
+            </div>
+            <div class="col">
+              <label class="form-label" for="template-type">Template Type:</label>
+              <select class="form-select" name="template-type">
+                  <option>Onboarding</option>
+                  <option>Offboarding</option>
+              </select>
+            </div>
+          <button class="btn btn-primary mb-3"  type="submit" name="submit" value="submit" style="margin-top: 80px;">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <script>
+    // Functions for the modal
+    let modalBtns = [...document.querySelectorAll("#button")];
+    modalBtns.forEach(function (btn) {
+      btn.onclick = function () {
+        let modal = btn.getAttribute("data-modal");
+        document.getElementById(modal).style.display = "block";
+      };
+    });
+    let closeBtns = [...document.querySelectorAll(".close")];
+    closeBtns.forEach(function (btn) {
+      btn.onclick = function () {
+        let modal = btn.closest(".modal");
+        modal.style.display = "none";
+      };
+    });
+    window.onclick = function (event) {
+      if (event.target.className === "modal") {
+        event.target.style.display = "none";
+      }
+    };
+  </script>
+{% endblock %}

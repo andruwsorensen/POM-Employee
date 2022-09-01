@@ -1,0 +1,4 @@
+# Required pip installs
+
+Django
+django-crispy-forms

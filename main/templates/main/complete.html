@@ -1,0 +1,15 @@
+{% extends 'main/index.html' %}
+
+{% block table %}
+<tbody>
+  {% for item in complete %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a class="person-link" href="{% url 'checklist' item.id %}">{{ item.fname }} {{ item.lname }}</td></a>
+      <td>{{ item.date }}</td>
+      <td>{{ item.type }}</td>
+      <td><a href="{% url 'incompleteChecklist' item.id %}"><button type="sumbit" class="btn btn-primary" name="incomplete" value="incomplete"> Mark Incomplete</button></a></td>
+    </tr>
+  {% endfor %}
+</tbody>
+{% endblock %}

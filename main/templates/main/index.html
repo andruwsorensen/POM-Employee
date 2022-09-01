@@ -1,0 +1,117 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+<section>
+  <div class="input-group">
+    <button id="button" class="btn btn-primary font-weight-bold" data-modal="add_checklist">+</button>
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Filter
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{% url 'complete' %}">Complete</a></li>
+      <li><a class="dropdown-item" href="{% url 'index' %}">Incomplete</a></li>
+    </ul>
+  </div>
+</section>
+<table class="table">
+  <thead class="table-light">
+    <tr>
+      <th></th>
+      <th scope="col">Name</th>
+      <th scope="col">Start/End Date</th>
+      <th scope="col">Type</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  {% block table %}
+  <tbody>
+    {% for item in incomplete %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a class="person-link" href="{% url 'checklist' item.id %}">{{ item.fname }} {{ item.lname }}</td></a>
+        <td>{{ item.date }}</td>
+        <td>{{ item.type }}</td>
+        <td><a href="{% url 'completeChecklist' item.id %}"><button type="sumbit" class="btn btn-primary" name="complete" value="complete">Mark Complete</button></a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  {% endblock %}
+</table>
+
+
+
+<!--Beginning of the form-->
+<div id="add_checklist" class="modal">
+  <div class="modal-content">
+    <div class="contact-form">
+      
+      <form id="new-form" class="row g-3" method="post" action="{% url 'addChecklist' %}">
+      {% csrf_token %}
+        <a class="close">&times;</a>
+        <h2 class="font-weight-bold text-center h2">New Person</h2>          
+          <div class="col-md-6">
+            <label class="form-label" for="fname">Name:</label>
+            <input class="form-control" type="text" name="fname" placeholder="First Name" required="True"/>
+          </div>
+          <div class="col-md-6">
+            <label for="lname"></label>
+            <input class="form-control" type="text" name="lname" placeholder="Last Name" required="True" style="margin-top: 8px;"/>
+          </div> 
+          <div class="col-md-6">
+            <label class="form-label" for="template">Choose a template:</label>
+            <select class="form-select" name="template">
+                <option disabled="disabled" style="color: lightgray;">Onboarding</option>
+
+                {% for template in onTemplates %}
+                <option style="color: black;">{{template.name}}</option>
+                {% endfor %}
+                <option disabled="disabled" style="color: lightgray;">Offboarding</option>
+
+                {% for template in offTemplates %}
+                <option style="color: black;">{{template.name}}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="date">Start/End Date:</label>
+            <input class="form-control" type="date" name="date" required="True" />
+          </div>
+        <span>Notes</span>
+        <div>
+          <textarea class="form-control" rows="4" name="notes"></textarea>
+        </div>
+        <button class="btn btn-primary mb-3"  type="submit" name="submit" value="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  // Functions for the modal
+  let modalBtns = [...document.querySelectorAll("#button")];
+  modalBtns.forEach(function (btn) {
+    btn.onclick = function () {
+      let modal = btn.getAttribute("data-modal");
+      document.getElementById(modal).style.display = "block";
+    };
+  });
+  let closeBtns = [...document.querySelectorAll(".close")];
+  closeBtns.forEach(function (btn) {
+    btn.onclick = function () {
+      let modal = btn.closest(".modal");
+      modal.style.display = "none";
+    };
+  });
+  window.onclick = function (event) {
+    if (event.target.className === "modal") {
+      event.target.style.display = "none";
+    }
+  };
+</script>
+{% endblock %}

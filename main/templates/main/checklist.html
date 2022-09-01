@@ -1,0 +1,83 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ checklist.fname }} {{ checklist.lname }}{% endblock %}
+
+{% block content %}
+<h1>{{ checklist.fname }} {{ checklist.lname }}</h1>
+<form class="row gx-3 gy-2 align-items-center" method="post" action="{% url 'checklistForm' checklist.id %}">
+    {% csrf_token %}
+    <h4>Start/End Date: {{ checklist.date }}</h3>
+    <h5>HR</h5>
+    <ul class="list-group list-group-flush">
+        {% for item in items %}
+            {% if item.task_type == "HR" %}
+                {% if item.complete == True %}
+                    <li class="list-group-item">
+                        <input class="form-check-input me-3" type="checkbox" value="clicked" name="c{{item.id}}" checked>{{ item }}
+                    </li>
+                {% else %}
+                    <li class="list-group-item">
+                        <input class="form-check-input me-3" type="checkbox" value="clicked" name="c{{item.id}}">{{ item }}
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <div class="input-group mb-3">
+        <input class="form-control" type="text" name="HRText" id="HRText">
+        <button class="btn btn-primary" type="submit" name="addItemHR" value="addItemHR" id="addItemHR">Add Item</button>
+    </div>
+
+    <h5>IT</h5>
+    <ul class="list-group list-group-flush">
+        {% for item in items %}
+            {% if item.task_type == "IT" %}
+                {% if item.complete == True %}
+                    <li class="list-group-item">
+                        <input class="form-check-input me-3" type="checkbox" value="clicked" name="c{{item.id}}" checked>{{ item }}
+                    </li>
+                {% else %}
+                    <li class="list-group-item">
+                        <input class="form-check-input me-3" type="checkbox" value="clicked" name="c{{item.id}}">{{ item }}
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <div class="input-group mb-3">
+        <input class="form-control" type="text" name="ITText" id="ITText">
+        <button class="btn btn-primary" type="submit" name="addItemIT" value="addItemIT" id="addItemIT">Add Item</button>
+    </div>
+    <div>
+        <label>Notes</label>
+        <textarea class="form-control" rows="4" name="notes">{{ checklist.notes }}</textarea>
+    </div>
+    <div style="width: 100%; text-align: center; margin-bottom: 150px;">
+        <button class="btn btn-primary" type="submit" name="save" value="save" style="padding: 5px 50px;">Save</button>
+    </div>  
+</form>
+
+<script>
+    // Get the input field
+var inputIT = document.getElementById("ITText");
+var inputHR = document.getElementById("HRText");
+// Execute a function when the user presses a key on the keyboard
+inputIT.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("addItemIT").click();
+  }
+});
+
+inputHR.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("addItemHR").click();
+  }
+});
+</script>
+{% endblock %}
+
