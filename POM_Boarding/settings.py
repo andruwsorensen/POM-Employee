@@ -134,7 +134,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
 
-LOGIN_REDIRECT_URL = '/POM_Boarding/'
-LOGOUT_REDIRECT_URL = '/POM_Boarding/'
-
-# FORCE_SCRIPT_NAME = '/POM_Boarding'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
